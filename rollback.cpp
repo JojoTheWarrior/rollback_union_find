@@ -39,4 +39,53 @@ struct RollbackUF {
         e[b] += e[a]; e[a] = b;
         return true;
     }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// this version stores distances to parents, too. from https://cp-algorithms.com/data_structures/disjoint_set_union.html
+const int MM = 1e5;
+
+pi parent[MM+1];
+int rnk[MM+1];
+void make_set(int v){
+    parent[v] = {v, 0};
+    rnk[v] = 0;
+}
+
+pi find_set(int v){
+    if (v != parent[v].F){
+        int len = parent[v].S;
+        parent[v] = find_set(parent[v].first);
+        parent[v].second += len;
+    }
+    return parent[v];
+}
+
+bool union_sets(int a, int b){
+    a = find_set(a).first;
+    b = find_set(b).first;
+    if (a == b) return false;
+    if (rnk[a] < rnk[b]) swap(a, b);
+    parent[b] = {a, 1};
+    if (rnk[a] == rnk[b]) rnk[a]++;
 }
